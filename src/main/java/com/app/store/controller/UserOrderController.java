@@ -35,6 +35,7 @@ public class UserOrderController {
         return userRepository.findByEmail(principal.getName()).orElse(null);
     }
 
+    
     @GetMapping
     public String viewOrderHistory(Principal principal, Model model) {
         User user = getAuthenticatedUser(principal);
@@ -47,6 +48,7 @@ public class UserOrderController {
         return "user/orders";
     }
 
+    
     @PostMapping("/items/{itemId}/return")
     public String requestReturn(@PathVariable("itemId") Long itemId, Principal principal, RedirectAttributes redirectAttributes) {
         User buyer = getAuthenticatedUser(principal);
@@ -63,6 +65,7 @@ public class UserOrderController {
 
         return "redirect:/user/orders";
     }
+
     
     @GetMapping("/{orderId}/invoice")
     public String viewInvoice(@PathVariable("orderId") Long orderId, Principal principal, Model model,
@@ -82,7 +85,7 @@ public class UserOrderController {
         }
     }
 
-
+    
     @PostMapping("/{orderId}/reorder")
     public String reorderItems(@PathVariable("orderId") Long orderId, Principal principal, RedirectAttributes redirectAttributes) {
         User user = getAuthenticatedUser(principal);
@@ -129,6 +132,4 @@ public class UserOrderController {
             return "redirect:/user/orders";
         }
     }
-    
-    
 }
