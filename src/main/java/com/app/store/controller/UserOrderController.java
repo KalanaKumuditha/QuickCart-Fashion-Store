@@ -46,5 +46,22 @@ public class UserOrderController {
 
         return "user/orders";
     }
+
+    @PostMapping("/items/{itemId}/return")
+    public String requestReturn(@PathVariable("itemId") Long itemId, Principal principal, RedirectAttributes redirectAttributes) {
+        User buyer = getAuthenticatedUser(principal);
+        if (buyer == null)
+            return "redirect:/login";
+
+        try {
+            orderLifecycleService.requestReturnByUser(itemId, buyer);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Return requested successfully. The seller has been notified.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/user/orders";
+    }
     
 }
