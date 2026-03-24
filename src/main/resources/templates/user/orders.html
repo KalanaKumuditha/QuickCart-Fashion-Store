@@ -19,10 +19,7 @@
                 Continue Shopping</a>
         </div>
 
-
-
-
-      
+        
         <div th:if="${successMessage}"
             style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: center;"
             th:text="${successMessage}"></div>
@@ -46,9 +43,6 @@
             </select>
         </div>
 
-
-
-      
         
         <div th:if="${#lists.isEmpty(orders)}"
             style="text-align: center; padding: 4rem 0; border: 1px dashed var(--border-color); border-radius: 0.5rem; color: var(--text-light);">
@@ -74,8 +68,7 @@
                         <div>
                             <div
                                 style="color: var(--text-light); text-transform: uppercase; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
-                   
-                              Order Placed</div>
+                                Order Placed</div>
                             <div style="color: var(--text-color); font-weight: 500;"
                                 th:text="${#temporals.format(order.createdAt, 'MMMM dd, yyyy')}">Date</div>
                         </div>
@@ -99,7 +92,6 @@
                                 style="color: var(--text-light); text-transform: uppercase; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.25rem;">
                                 Order #</div>
                             <div style="color: var(--text-color); font-family: monospace;" th:text="${order.id}">123456
-                    
                             </div>
                         </div>
                     </div>
@@ -111,8 +103,7 @@
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
-                
-                              <line x1="12" y1="15" x2="12" y2="3"></line>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
                             Invoice
                         </a>
@@ -133,8 +124,7 @@
                     <div th:each="item, stat : ${order.items}"
                         th:style="${!stat.last ? 'margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9;' : ''}">
 
-            
-                      <div
+                        <div
                             style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
                             
                             <div>
@@ -158,10 +148,8 @@
                                     Contact Seller
                                 </a>
 
-                              
                                 <!-- Report Seller Button -->
-                        
-                              <button th:if="${item.productVariant.product.seller != null}" 
+                                <button th:if="${item.productVariant.product.seller != null}" 
                                     type="button"
                                     th:onclick="'document.getElementById(\'reportModal-' + ${item.id} + '\').style.display=\'flex\''"
                                     style="padding: 0.5rem 1rem; border: 1px solid #f59e0b; border-radius: 0.375rem; background: white; color: #f59e0b; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: background 0.2s;"
@@ -183,7 +171,6 @@
                             </div>
                         </div>
 
-                      
                         <!-- Report Modal -->
                         <div th:if="${item.productVariant.product.seller != null}" 
                                 th:id="'reportModal-' + ${item.id}" 
@@ -205,8 +192,7 @@
                                             <option value="Other">Other</option>
                                         </select>
                                     </div>
-                 
-                                  <div>
+                                    <div>
                                         <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Description</label>
                                         <textarea name="description" rows="4" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical; box-sizing: border-box;"></textarea>
                                     </div>
@@ -231,8 +217,7 @@
                                     style="font-size: 1.1rem; font-weight: 500; color: var(--primary-color); text-decoration: none;"
                                     th:text="${item.productVariant.product.title}">Product Title</a>
 
-                       
-                              <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;"
+                                <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem;"
                                     th:text="${item.productVariant.size + ' | ' + item.productVariant.color}">Size |
                                     Color</div>
 
@@ -248,7 +233,6 @@
                                         th:text="${'LKR ' + item.priceAtTimeOfPurchase}">LKR 0.00</div>
                                     <div style="color: var(--text-light); font-size: 0.9rem;"
                                         th:text="${'Qty: ' + item.quantity}">Qty: 1</div>
-            
                                 </div>
                             </div>
                         </div>
@@ -264,20 +248,17 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-      
-          const searchInput = document.getElementById("orderSearch");
+            const searchInput = document.getElementById("orderSearch");
             const filterSelect = document.getElementById("orderFilter");
             const orderCards = document.querySelectorAll(".order-card");
 
-          
             function filterOrders() {
                 if (!searchInput || !filterSelect) return;
                 const searchTerm = searchInput.value.toLowerCase();
                 const filterTerm = filterSelect.value.toUpperCase();
 
                 orderCards.forEach(card => {
-        
-                  const textContent = card.innerText.toLowerCase();
+                    const textContent = card.innerText.toLowerCase();
                     const statusElements = card.querySelectorAll(".item-status");
                     let hasMatchingStatus = false;
 
@@ -288,7 +269,6 @@
                             if (el.innerText.trim().toUpperCase() === filterTerm) {
                                 hasMatchingStatus = true;
                             }
-        
                         });
                     }
 
@@ -297,7 +277,6 @@
                     } else {
                         card.style.display = "none";
                     }
-           
                 });
             }
 
