@@ -64,4 +64,23 @@ public class UserOrderController {
         return "redirect:/user/orders";
     }
     
+    @GetMapping("/{orderId}/invoice")
+    public String viewInvoice(@PathVariable("orderId") Long orderId, Principal principal, Model model,
+            RedirectAttributes redirectAttributes) {
+        User user = getAuthenticatedUser(principal);
+        if (user == null)
+            return "redirect:/login";
+
+        try {
+            Order order = orderService.getOrderById(orderId, user);
+            model.addAttribute("order", order);
+            model.addAttribute("user", user);
+            return "user/invoice";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Unable to retrieve invoice: " + e.getMessage());
+            return "redirect:/user/orders";
+        }
+    }
+    
+    
 }
