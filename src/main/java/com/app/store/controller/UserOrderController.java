@@ -34,4 +34,17 @@ public class UserOrderController {
             return null;
         return userRepository.findByEmail(principal.getName()).orElse(null);
     }
+
+    @GetMapping
+    public String viewOrderHistory(Principal principal, Model model) {
+        User user = getAuthenticatedUser(principal);
+        if (user == null)
+            return "redirect:/login";
+
+        List<Order> orders = orderService.getUserOrders(user);
+        model.addAttribute("orders", orders);
+
+        return "user/orders";
+    }
+    
 }
