@@ -81,6 +81,54 @@ public class UserOrderController {
             return "redirect:/user/orders";
         }
     }
+
+
+    @PostMapping("/{orderId}/reorder")
+    public String reorderItems(@PathVariable("orderId") Long orderId, Principal principal, RedirectAttributes redirectAttributes) {
+        User user = getAuthenticatedUser(principal);
+        if (user == null)
+            return "redirect:/login";
+
+        try {
+            Order order = orderService.getOrderById(orderId, user);
+            int itemsAdded = 0;
+            int itemsSkipped = 0;
+
+            for (OrderItem item : order.getItems()) {
+                ProductVariant variant = item.getProductVariant();
+                
+                if (variant == null || variant.getProduct() == null) {
+                    itemsSkipped++;
+                    continue;
+                }
+
+                
+                int qtyToAdd = Math.min(item.getQuantity(), variant.getStockQuantity());
+
+                if (qtyToAdd > 0) {
+                    cartService.addToCart(user, variant.getId(), qtyToAdd);
+                    itemsAdded++;
+                } else {
+                    itemsSkipped++;
+                }
+            }
+
+            if (itemsAdded > 0 && itemsSkipped == 0) {
+                redirectAttributes.addFlashAttribute("successMessage", "All items successfully added to your cart!");
+            } else if (itemsAdded > 0 && itemsSkipped > 0) {
+                redirectAttributes.addFlashAttribute("successMessage",
+                        "Added available items to your cart. Some items were out of stock or unavailable.");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "Could not reorder. All items from this order are currently out of stock or unavailable.");
+            }
+
+            return "redirect:/cart";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to initiate reorder: " + e.getMessage());
+            return "redirect:/user/orders";
+        }
+    }
     
     
 }
