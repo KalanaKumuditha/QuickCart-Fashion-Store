@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Auctions | QC.</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        
+        <aside th:replace="~{fragments/seller-sidebar :: sidebar(activePage='active-auctions')}"></aside>
+
+        <main class="main-content">
+            <div class="page-header"
+                style="background: transparent; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                <h1 class="page-title" style="color: #0f172a;">Live Biddings</h1>
+                <p class="page-subtitle" style="color: #64748b;">Discover exclusive pieces and place your highest bid.
+                    Auctions close
+                    automatically
+                    when the target is reached.</p>
+            </div>
+
+            <div class="grid-container">
+                <div th:each="auction : ${auctions}" class="auction-card">
+                    <a th:href="@{/seller/auctions/active/{id}(id=${auction.id})}">
+                        <img th:src="${auction.product.mainImageUrl}" alt="Product" class="auction-image">
+                    </a>
+                    <div class="auction-info">
+                        <a th:href="@{/seller/auctions/active/{id}(id=${auction.id})}" class="auction-title"
+                            th:text="${auction.product.title}">Product Title</a>
+                        <div class="auction-seller" th:text="'Sold by: ' + ${auction.seller.name}">Seller Name</div>
+                        <div style="font-size: 0.85rem; color: #3b82f6; margin-bottom: 0.5rem; font-weight: 500;"
+                            th:text="'Includes ' + ${auction.clothingPieces} + ' pieces'">Pieces count</div>
+
+                        <div class="price-row">
+                            <div>
+                                <div class="bid-label">Current Top Bid</div>
+                                <div class="current-bid"
+                                    th:text="${'LKR ' + #numbers.formatDecimal(auction.currentHighestBid, 1, 'COMMA', 2, 'POINT')}">
+                                    Price</div>
+                            </div>
+                            <a th:href="@{/seller/auctions/active/{id}(id=${auction.id})}" class="btn-bid">Bid
+                                Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(auctions)}" class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        style="margin-bottom: 1rem; opacity: 0.5;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+        </main>
+    </div>
+</body>
+
+</html>
 
