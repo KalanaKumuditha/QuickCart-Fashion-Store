@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Invoice #' + ${order.id} + ' | QC.'">Invoice | QC.</title>
+    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <button class="print-btn" onclick="window.print()">Print Invoice</button>
+
+    <div class="invoice-container">
+        <div class="header">
+            <div class="brand">
+                <h1>QC.</h1>
+                <p>Premium Fashion Marketplace</p>
+                <p>contact@QCstore.com</p>
+            </div>
+            <div class="invoice-details">
+                <h2>INVOICE</h2>
+                <p><strong>Order #:</strong> <span th:text="${order.id}">1234</span></p>
+                <p><strong>Date:</strong> <span th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy')}">01 Jan
+                        2026</span></p>
+                <p><strong>Status:</strong> <span style="color: #10b981; font-weight: 600;"
+                        th:text="${order.orderStatus}">PAID</span></p>
+            </div>
+        </div>
+
+        <div class="meta-grid">
+            <div class="meta-section">
+                <h3>Billed To</h3>
+                <p><strong th:text="${user.name}">John Doe</strong></p>
+                <p th:text="${user.email}">user@example.com</p>
+                <p th:text="${user.phone}">+123456789</p>
+            </div>
+            <div class="meta-section">
+                <h3>Shipped To</h3>
+                <p th:text="${order.shippingAddress}">123 Fashion Ave, NY 10001</p>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th style="text-align: right;">Qty</th>
+                    <th style="text-align: right;">Price</th>
+                    <th style="text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${order.items}">
+                    <td>
+                        <strong th:text="${item.productVariant.product.title}">Product Title</strong>
+                        <div class="item-meta"
+                            th:text="'Size: ' + ${item.productVariant.size} + ' | Color: ' + ${item.productVariant.color}">
+                            Size: M | Color: Blue</div>
+                    </td>
+                    <td style="text-align: right;" th:text="${item.quantity}">1</td>
+                    <td style="text-align: right;"
+                        th:text="${'LKR ' + #numbers.formatDecimal(item.priceAtTimeOfPurchase, 1, 'COMMA', 2, 'POINT')}">
+                        500.00</td>
+                    <td style="text-align: right;"
+                        th:text="${'LKR ' + #numbers.formatDecimal(item.priceAtTimeOfPurchase * item.quantity, 1, 'COMMA', 2, 'POINT')}">
+                        500.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals-container">
+            <div class="total-row">
+                <span>Subtotal</span>
+                <span
+                    th:text="${'LKR ' + #numbers.formatDecimal(order.subtotal, 1, 'COMMA', 2, 'POINT')}">1000.00</span>
+            </div>
+            <div class="total-row">
+                <span>Shipping</span>
+                <span
+                    th:text="${'LKR ' + #numbers.formatDecimal(order.deliveryCharge, 1, 'COMMA', 2, 'POINT')}">50.00</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Total</span>
+                <span
+                    th:text="${'LKR ' + #numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">1050.00</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Thank you for shopping with QC.</p>
+            <p style="font-size: 0.8rem; margin-top: 10px;">This is a computer-generated document. No signature is
+                required.</p>
+        </div>
+    </div>
+</body>
+
+</html>
