@@ -51,6 +51,7 @@
 
                     
                     <th:block th:each="user : ${conversations}">
+
                         <a th:if="${user.id != otherUser.id}" th:href="@{/seller/messages/{id}(id=${user.id})}"
                             style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(0, 0, 0,0.05); border-left: 4px solid transparent; text-decoration: none; transition: background 0.2s; color: inherit;"
                             onmouseover="this.style.backgroundColor='#e2e8f0'"
