@@ -14,24 +14,24 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class CategoryController {
+public class CategoryController { // category controller class
 
-    private final CategoryRepository categoryRepository;
-    private final ProductService productService;
+    private final CategoryRepository categoryRepository; // to access category data in to database
+    private final ProductService productService; //product service is used to retrieve filtered product data from backend
 
     @GetMapping("/categories")
-    public String viewCategoryGallery(Model model) {
+    public String viewCategoryGallery(Model model) { //Get all categories
         List<Category> allCategories = categoryRepository.findAll();
         model.addAttribute("categories", allCategories);
-        return "category/list";
+        return "category/list"; // filter dropdown
     }
 
     @GetMapping("/category/{name}")
-    public String viewProductsInCategory(@PathVariable String name, Model model) {
-        List<Product> products = productService.getProductsWithFilterAndSort(null, name, null);
-        model.addAttribute("products", products);
-        model.addAttribute("currentCategory", name);
-        model.addAttribute("categoryFeatureTitle", name + " Collection");
-        return "shop";
+    public String viewProductsInCategory(@PathVariable String name, Model model) { //handle category based filtering
+        List<Product> products = productService.getProductsWithFilterAndSort(null, name, null); //calling filter service
+        model.addAttribute("products", products);// send filtered product to the ui
+        model.addAttribute("currentCategory", name); // current category display
+        model.addAttribute("categoryFeatureTitle", name + " Collection"); //dynamically update the collection title based on selected category
+        return "shop"; // filtered product are display in shop page
     }
 }
